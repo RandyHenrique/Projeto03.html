@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Arrays</title>
+
+<body>
+    <script>
+        let contatos = [];
+        let repetir = true
+
+        do {
+            const opcao = mostrarMenu()
+            switch (opcao) {
+                case "1":
+                    cadastrarContato();
+                    break;
+                case "2":
+                    listarContatos()
+                    break;
+                case "3":
+                    buscarContato()
+                    break;
+                case "4":
+                    atualizarContato()
+                    break;
+                case "5":
+                    deletarContato()
+                    break;
+                case "0":
+                    repetir = false
+                    break;
+            }
+
+        } while (repetir)
+
+
+        function cadastrarContato() {
+            const nome = prompt('Digite o nome:');
+            const telefone = prompt('Digite o telefone:');
+            const email = prompt('Digite o email:');
+            contatos.push([nome, telefone, email]);
+            console.log("Contato cadastrado com sucesso!");
+        }
+
+        function buscarContato() { //Buscando contato//
+            let nomeContato = prompt("Digite o nome do contato");
+
+            let listaContatos = ""
+
+            for (let i = 0; i < contatos.length; i++) {
+                if (nomeContato === contatos[i][0]) {
+                    listaContatos += "contato nr: " + i + 1 + "\n"
+                        + "Nome: " + contatos[i][0]
+                        + " Telefone: " + contatos[i][1]
+                        + " Email: " + contatos[i][1] + "\n"
+                }
+            }
+
+            if(listaContatos === ""){
+                listaContatos = "Contato não encontrado"
+            }
+
+            alert(listaContatos)
+
+        }
+        
+        function atualizarContato() {  //Atualizando o contato//
+            let naoEncontrado = true
+
+            const nomeContato = prompt("Digite o nome do contato que deseja Atualizar");
+            for (let i = 0; i < contatos.length; i++) {
+                if (nomeContato === contatos[i][0]) {
+                    naoEncontrado = false
+                    const nome = prompt('Digite o nome:');
+                    const telefone = prompt('Digite o telefone:');
+                    const email = prompt('Digite o email:');
+                    contatos[i] = [nome, telefone, email]
+                }
+
+            }
+            if (naoEncontrado) {
+                alert("Contato não encontrado!!");
+            }
+
+        }
+
+        function deletarContato() { //Deletando contato//
+            let nomeContato = prompt("Digite o nome do contato que deseja deletar");
+            for (let i = 0; i < contatos.length; i++) {
+                if (nomeContato === contatos[i][0]) {
+                    contatos.splice(i, 1)
+                    alert("O contato foi deletado com sucesso")
+                }
+            }
+        }
+
+        function mostrarMenu() {
+            return prompt(
+                "=== AGENDA DE CONTATOS ===\n" +
+                "1) Cadastrar contato\n" +
+                "2) Listar contatos\n" +
+                "3) Buscar contato\n" +
+                "4) Atualizar contato\n" +
+                "5) Remover contato\n" +
+                "0) Sair\n\n" +
+                "Escolha uma opção:"
+            );
+        }
+
+        function listarContatos() { //Listando o contato//
+
+            let listaContatos = ""
+
+            for (let i = 0; i < contatos.length; i++) {
+                listaContatos += "Nome: " + contatos[i][0] + " Telefone: " + contatos[i][1] + " Email: " + contatos[i][1] + "\n"
+            }if(listaContatos === ""){
+                listaContatos = "Lista de contato vazia"
+                
+            }
+
+            alert(listaContatos)
+
+        }
+    </script>
+
+</body>
+</head>
+
+</html>
