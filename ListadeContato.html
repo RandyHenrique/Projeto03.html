@@ -3,96 +3,159 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Arrays</title>
+    <title>Agenda de Contatos</title>
+</head>
 
 <body>
     <script>
         let contatos = [];
-        let repetir = true
+        let repetir = true;
 
         do {
-            const opcao = mostrarMenu()
+            const opcao = mostrarMenu();
             switch (opcao) {
                 case "1":
                     cadastrarContato();
                     break;
                 case "2":
-                    listarContatos()
+                    listarContatos();
                     break;
                 case "3":
-                    buscarContato()
+                    buscarContato();
                     break;
                 case "4":
-                    atualizarContato()
+                    atualizarContato();
                     break;
                 case "5":
-                    deletarContato()
+                    deletarContato();
                     break;
                 case "0":
-                    repetir = false
+                    repetir = false;
+                    alert("Saindo da agenda de contatos.");
+                    break;
+                default:
+                    alert("Opção inválida. Por favor, escolha uma opção de 0 a 5.");
                     break;
             }
 
-        } while (repetir)
-
+        } while (repetir);
 
         function cadastrarContato() {
-            const nome = prompt('Digite o nome:');
-            const telefone = prompt('Digite o telefone:');
-            const email = prompt('Digite o email:');
+            let nome = prompt('Digite o nome:').trim();
+            // Valida se o nome está vazio
+            if (!nome) {
+                alert("O nome não pode ser vazio. Cadastro cancelado.");
+                return;
+            }
+
+            let telefone = prompt('Digite o telefone:').trim();
+            // Valida se o telefone está vazio
+            if (!telefone) {
+                alert("O telefone não pode ser vazio. Cadastro cancelado.");
+                return;
+            }
+
+            let email = prompt('Digite o email:').trim();
+            // Valida se o email está vazio
+            if (!email) {
+                alert("O email não pode ser vazio. Cadastro cancelado.");
+                return;
+            }
+
             contatos.push([nome, telefone, email]);
-            console.log("Contato cadastrado com sucesso!");
+            alert("Contato cadastrado com sucesso!");
         }
 
-        function buscarContato() { //Buscando contato//
-            let nomeContato = prompt("Digite o nome do contato");
+        function buscarContato() {
+            const nomeContato = prompt("Digite o nome do contato que deseja buscar:");
+            if (!nomeContato) {
+                alert("A busca foi cancelada.");
+                return;
+            }
 
-            let listaContatos = ""
+            let listaContatos = "";
+            let encontrado = false;
 
             for (let i = 0; i < contatos.length; i++) {
-                if (nomeContato === contatos[i][0]) {
-                    listaContatos += "contato nr: " + i + 1 + "\n"
-                        + "Nome: " + contatos[i][0]
-                        + " Telefone: " + contatos[i][1]
-                        + " Email: " + contatos[i][1] + "\n"
+                // Compara ignorando a diferença entre maiúsculas e minúsculas
+                if (contatos[i][0].toLowerCase().includes(nomeContato.toLowerCase())) {
+                    encontrado = true;
+                    listaContatos += `Contato #${i + 1}:\nNome: ${contatos[i][0]}\nTelefone: ${contatos[i][1]}\nEmail: ${contatos[i][2]}\n\n`;
                 }
             }
 
-            if(listaContatos === ""){
-                listaContatos = "Contato não encontrado"
+            if (encontrado) {
+                alert(listaContatos);
+            } else {
+                alert("Contato não encontrado.");
             }
-
-            alert(listaContatos)
-
-        }
-        
-        function atualizarContato() {  //Atualizando o contato//
-            let naoEncontrado = true
-
-            const nomeContato = prompt("Digite o nome do contato que deseja Atualizar");
-            for (let i = 0; i < contatos.length; i++) {
-                if (nomeContato === contatos[i][0]) {
-                    naoEncontrado = false
-                    const nome = prompt('Digite o nome:');
-                    const telefone = prompt('Digite o telefone:');
-                    const email = prompt('Digite o email:');
-                    contatos[i] = [nome, telefone, email]
-                }
-
-            }
-            if (naoEncontrado) {
-                alert("Contato não encontrado!!");
-            }
-
         }
 
-        function deletarContato() { //Deletando contato//
-            let nomeContato = prompt("Digite o nome do contato que deseja deletar");
+        function atualizarContato() {
+            const nomeContato = prompt("Digite o nome do contato que deseja atualizar:").trim();
+            if (!nomeContato) {
+                alert("A atualização foi cancelada.");
+                return;
+            }
+
+            let contatoAtualizado = false;
+
             for (let i = 0; i < contatos.length; i++) {
-                if (nomeContato === contatos[i][0]) {
-                    contatos.splice(i, 1)
-                    alert("O contato foi deletado com sucesso")
+                if (contatos[i][0].toLowerCase() === nomeContato.toLowerCase()) {
+                    let novoNome = prompt('Digite o novo nome:').trim();
+                    if (!novoNome) {
+                        alert("Nome inválido. A atualização foi cancelada.");
+                        return;
+                    }
+
+                    let novoTelefone = prompt('Digite o novo telefone:').trim();
+                    if (!novoTelefone) {
+                        alert("Telefone inválido. A atualização foi cancelada.");
+                        return;
+                    }
+
+                    let novoEmail = prompt('Digite o novo email:').trim();
+                    if (!novoEmail) {
+                        alert("Email inválido. A atualização foi cancelada.");
+                        return;
+                    }
+
+                    contatos[i] = [novoNome, novoTelefone, novoEmail];
+                    alert(`O contato de ${nomeContato} foi atualizado com sucesso!`);
+                    contatoAtualizado = true;
+                    break;
                 }
+            }
+
+            if (!contatoAtualizado) {
+                alert("Contato não encontrado.");
+            }
+        }
+
+        function deletarContato() {
+            const nomeContato = prompt("Digite o nome do contato que deseja deletar:").trim();
+            if (!nomeContato) {
+                alert("A exclusão foi cancelada.");
+                return;
+            }
+
+            let contatoDeletado = false;
+            for (let i = 0; i < contatos.length; i++) {
+                if (contatos[i][0].toLowerCase() === nomeContato.toLowerCase()) {
+                    const confirmacao = confirm(`Tem certeza que deseja deletar o contato de ${contatos[i][0]}?`);
+                    if (confirmacao) {
+                        contatos.splice(i, 1);
+                        alert("O contato foi deletado com sucesso.");
+                        contatoDeletado = true;
+                        break;
+                    } else {
+                        alert("A exclusão foi cancelada pelo usuário.");
+                        return;
+                    }
+                }
+            }
+            if (!contatoDeletado) {
+                alert("Contato não encontrado.");
             }
         }
 
@@ -109,23 +172,18 @@
             );
         }
 
-        function listarContatos() { //Listando o contato//
-
-            let listaContatos = ""
-
-            for (let i = 0; i < contatos.length; i++) {
-                listaContatos += "Nome: " + contatos[i][0] + " Telefone: " + contatos[i][1] + " Email: " + contatos[i][1] + "\n"
-            }if(listaContatos === ""){
-                listaContatos = "Lista de contato vazia"
-                
+        function listarContatos() {
+            if (contatos.length === 0) {
+                alert("A lista de contatos está vazia.");
+                return;
             }
 
-            alert(listaContatos)
-
+            let listaContatos = "";
+            for (let i = 0; i < contatos.length; i++) {
+                listaContatos += `Contato #${i + 1}:\nNome: ${contatos[i][0]}\nTelefone: ${contatos[i][1]}\nEmail: ${contatos[i][2]}\n\n`;
+            }
+            alert(listaContatos);
         }
     </script>
-
 </body>
-</head>
-
 </html>
